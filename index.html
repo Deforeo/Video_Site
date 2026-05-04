@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>I LOVE YOU BABY — Fixed Text</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+
+        :root {
+            --orange: #ffae42;
+            --pink: #ffb8c6;
+            --dark-text: #2c1a00;
+            --accent: #ff2a6d;
+        }
+
+        body, html {
+            width: 100%; height: 100%; overflow: hidden;
+            transition: background-color 0.4s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body.bg-orange { background-color: var(--orange); }
+        body.bg-pink { background-color: var(--pink); }
+
+        #stage { position: relative; width: 100vw; height: 100vh; overflow: hidden; pointer-events: none; }
+
+        /* ---------- КОНТЕЙНЕР (Позиция и Появление) ---------- */
+        .word {
+            position: absolute;
+            z-index: 30;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+        }
+
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translate(-50%, -50%) translateY(20px); }
+            100% { opacity: 1; transform: translate(-50%, -50%) translateY(0); }
+        }
+        .word.appear { animation: fadeUp 0.4s ease-out forwards; }
+
+        /* ---------- ВНУТРЕННИЙ ТЕКСТ (Эффекты) ---------- */
+        .word-inner {
+            display: block;
+            color: var(--dark-text);
+            text-align: center;
+            white-space: nowrap;
+            filter: drop-shadow(3px 3px 0 white);
+            font-weight: 900;
+            /* Общая анимация "дыхания" для всего текста */
+            animation: textBreathing 2s infinite alternate ease-in-out;
+        }
+
+        @keyframes textBreathing {
+            from { transform: scale(1); }
+            to { transform: scale(1.03); }
+        }
+
+        /* КАРАОКЕ-ПОДСВЕТКА */
+        .karaoke {
+            color: var(--accent) !important;
+            text-shadow: 0 0 8px #ff66aa;
+            transition: 0.2s;
+        }
+
+        /* СПЕЦЭФФЕКТ ДЛЯ STAY! */
+        .pulse-shake {
+            animation: pulseShake 0.6s ease-in-out infinite alternate !important;
+        }
+        @keyframes pulseShake {
+            0% { transform: scale(1) rotate(0deg); color: var(--dark-text); }
+            100% { transform: scale(1.15) rotate(2deg); color: var(--accent); }
+        }
+
+        /* ФИКС ФИНАЛЬНОГО YOOOOOOOU (Стабильный и мощный) */
+        .final-yell {
+            animation: finalExpand 0.8s infinite alternate ease-in-out !important;
+            display: inline-block;
+            color: var(--accent) !important;
+            text-shadow: 0 0 20px #ff3388 !important;
+        }
+        @keyframes finalExpand {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); filter: brightness(1.2); }
+        }
+
+        .shake { animation: shakeAnim 0.15s infinite alternate; }
+        @keyframes shakeAnim {
+            from { transform: translateX(-2px); }
+            to { transform: translateX(2px); }
+        }
+
+        .size-l { font-size: clamp(3.5rem, 14vw, 9.5rem); }
+        .size-m { font-size: clamp(2rem, 7vw, 5.5rem); font-weight: 800; }
+
+        .baby-force {
+            font-family: 'Permanent Marker', cursive !important;
+            font-size: clamp(6rem, 20vw, 14rem) !important;
+            color: #ff1a6e !important;
+            -webkit-text-stroke: 2px white !important;
+            animation: babyBounce 0.5s infinite alternate ease-in-out !important;
+        }
+        @keyframes babyBounce {
+            from { transform: scale(0.96) rotate(-3deg); }
+            to { transform: scale(1.08) rotate(3deg); }
+        }
+
+        .final-glow {
+            font-size: clamp(3rem, 14vw, 9rem) !important;
+            background: linear-gradient(135deg, #fff1b5, #ffae42, #ff5e7e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent !important;
+            animation: pulseGlow 0.8s infinite alternate !important;
+        }
+        @keyframes pulseGlow {
+            from { transform: scale(0.98); }
+            to { transform: scale(1.05); }
+        }
+
+        /* ---------- ФОТО (БЕЗ ИЗМЕНЕНИЙ) ---------- */
+        .photo-item {
+            position: absolute; width: 400px; max-width: 80vw;
+            background: white; padding: 14px 14px 24px 14px;
+            border-radius: 8px; box-shadow: 0 25px 35px -12px rgba(0,0,0,0.4);
+            opacity: 0;
+            transform: translate(-50%, -50%) rotate(var(--rot)) scale(0.3);
+            animation: photoFly 0.5s cubic-bezier(0.2, 1.1, 0.4, 1) forwards, gentleFloat 4s infinite alternate;
+        }
+        @keyframes photoFly { to { opacity: 1; transform: translate(-50%, -50%) rotate(var(--rot)) scale(var(--scl)); } }
+        @keyframes gentleFloat {
+            from { transform: translate(-50%, -50%) rotate(var(--rot)) scale(var(--scl)) translateY(0); }
+            to { transform: translate(-50%, -50%) rotate(var(--rot)) scale(var(--scl)) translateY(-12px); }
+        }
+
+        .fade-out { animation: fadeOut 0.3s forwards !important; }
+        @keyframes fadeOut { to { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } }
+
+        #overlay {
+            position: fixed; inset: 0; background: radial-gradient(circle at 40% 30%, #ffc285, #ff9800);
+            z-index: 1000; display: flex; justify-content: center; align-items: center; cursor: pointer;
+        }
+        .start-btn { font-size: 2.5rem; font-weight: 900; color: white; border: 3px solid white; padding: 1rem 2.5rem; border-radius: 70px; background: rgba(0,0,0,0.2); backdrop-filter: blur(10px); }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Permanent+Marker&display=swap" rel="stylesheet">
+</head>
+<body class="bg-orange">
+
+<div id="overlay" onclick="startShow()">
+    <div class="start-btn">💖 ПОГНАЛИ! 💖</div>
+</div>
+
+<div id="stage"></div>
+<audio id="musicTrack" src="song_7TMw3MWT.mp3" preload="auto"></audio>
+
+<script>
+    (function(){
+        const audio = document.getElementById('musicTrack');
+        const stage = document.getElementById('stage');
+
+        const imageList = [
+            "2026-05-03 19.49.19.jpg", "2026-05-03 19.49.26.jpg", "2026-05-03 19.49.36.jpg", 
+            "2026-05-03 19.49.42.jpg", "2026-05-03 19.49.48.jpg", "2026-05-03 19.50.09.jpg",
+            "2026-05-03 19.50.40.jpg", "2026-05-03 19.50.45.jpg", "2026-05-03 21.57.31.jpg", 
+            "2026-05-03 21.56.16.jpg", "2026-05-03 22.03.55.jpg", "2026-05-03 22.04.05.jpg",
+            "2026-05-04 22.09.51.jpg", "2026-05-04 22.08.25.jpg", "2026-05-04 22.09.58.jpg", 
+            "2026-05-04 22.08.25.jpg", "2026-05-03 21.57.31.jpg", "2026-05-04 22.08.49.jpg", 
+            "2026-05-03 22.03.55.jpg", "2026-05-04 22.09.21.jpg", "2026-05-04 22.07.40.jpg", 
+            "2026-05-04 22.07.30.jpg", "2026-05-04 22.07.13.jpg", "2026-05-04 22.07.09.jpg", 
+            "2026-05-04 22.06.57.jpg", "2026-05-04 22.06.50.jpg", "2026-05-04 22.06.46.jpg"
+        ];
+
+        const sequence = [
+            { t: 4.00, txt: "I",      clear: true,  style: "size-l", x: 22, y: 40, bg: "orange", photo: true, special: false },
+            { t: 4.50, txt: "LOVE",   clear: false, style: "size-l", x: 50, y: 40, bg: null,     photo: true, special: false },
+            { t: 5.00, txt: "YOU",    clear: false, style: "size-l", x: 78, y: 40, bg: null,     photo: true, special: false },
+            { t: 5.50, txt: "baby",   clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false, special: false },
+            { t: 7.00, txt: "AND",    clear: true,  style: "size-m", x: 22, y: 30, bg: "orange",  photo: true, special: false },
+            { t: 7.35, txt: "IF",     clear: false, style: "size-m", x: 50, y: 30, bg: null,     photo: true, special: false },
+            { t: 7.70, txt: "IT'S",   clear: false, style: "size-m", x: 78, y: 30, bg: null,     photo: true, special: false },
+            { t: 8.05, txt: "QUITE",  clear: false, style: "size-m", x: 32, y: 52, bg: null,     photo: true, special: false },
+            { t: 8.60, txt: "ALRIGHT!", clear: false, style: "size-l shake", x: 78, y: 52, bg: "pink", photo: true, special: false },
+            { t: 9.30, txt: "I",      clear: true,  style: "size-l", x: 22, y: 35, bg: "orange", photo: true, special: false },
+            { t: 9.70, txt: "NEED",   clear: false, style: "size-l", x: 50, y: 35, bg: null,     photo: true, special: false },
+            { t: 10.10, txt: "YOU",   clear: false, style: "size-l", x: 78, y: 35, bg: null,     photo: true, special: false },
+            { t: 10.50, txt: "baby",  clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false, special: false },
+            { t: 11.20, txt: "TO",    clear: true,  style: "size-m", x: 22, y: 28, bg: "orange",  photo: true, special: false },
+            { t: 11.55, txt: "WARM",  clear: false, style: "size-m", x: 50, y: 28, bg: null,     photo: true, special: false },
+            { t: 11.90, txt: "THE",   clear: false, style: "size-m", x: 78, y: 28, bg: null,     photo: true, special: false },
+            { t: 12.25, txt: "LONELY", clear: false, style: "size-l shake", x: 32, y: 50, bg: null, photo: true, special: false },
+            { t: 12.80, txt: "NIGHT", clear: false, style: "size-l", x: 68, y: 50, bg: "pink",     photo: true, special: false },
+            { t: 13.60, txt: "I",     clear: true,  style: "size-l", x: 22, y: 38, bg: "orange", photo: true, special: false },
+            { t: 14.00, txt: "LOVE",  clear: false, style: "size-l", x: 50, y: 38, bg: null,     photo: true, special: false },
+            { t: 14.40, txt: "YOU",   clear: false, style: "size-l", x: 78, y: 38, bg: null,     photo: true, special: false },
+            { t: 14.80, txt: "baby",  clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false, special: false },
+            { t: 15.50, txt: "TRUST", clear: true,  style: "size-m", x: 22, y: 30, bg: "orange", photo: true, special: false },
+            { t: 15.90, txt: "IN",    clear: false, style: "size-m", x: 50, y: 30, bg: null,     photo: true, special: false },
+            { t: 16.30, txt: "ME",    clear: false, style: "size-m", x: 78, y: 30, bg: null,     photo: true, special: false },
+            { t: 16.70, txt: "WHEN",  clear: false, style: "size-m", x: 28, y: 52, bg: null,     photo: true, special: false },
+            { t: 17.10, txt: "I",     clear: false, style: "size-m", x: 50, y: 52, bg: null,     photo: true, special: false },
+            { t: 17.85, txt: "SAAAAAY", clear: false, style: "size-l shake", x: 72, y: 52, bg: "pink", photo: true, special: true },
+            { t: 20.20, txt: "OH",     clear: true,  style: "size-l", x: 32, y: 42, bg: "orange", photo: true, special: false },
+            { t: 20.60, txt: "PRETTY", clear: false, style: "size-l", x: 68, y: 42, bg: null,     photo: true, special: false },
+            { t: 21.10, txt: "baby",   clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false, special: false },
+            { t: 22.60, txt: "DON'T", clear: true,  style: "size-m", x: 18, y: 30, bg: "orange", photo: true, special: false },
+            { t: 23.00, txt: "BRING", clear: false, style: "size-m", x: 36, y: 30, bg: null,     photo: true, special: false },
+            { t: 23.40, txt: "ME",    clear: false, style: "size-m", x: 54, y: 30, bg: null,     photo: true, special: false },
+            { t: 23.80, txt: "DOWN",  clear: false, style: "size-m", x: 72, y: 30, bg: null,     photo: true, special: false },
+            { t: 24.20, txt: "I",     clear: false, style: "size-m", x: 32, y: 52, bg: null,     photo: true, special: false },
+            { t: 24.60, txt: "PRAY",  clear: false, style: "size-l shake", x: 68, y: 52, bg: "pink", photo: true, special: true },
+            { t: 25.30, txt: "OH",     clear: true,  style: "size-l", x: 32, y: 42, bg: "orange", photo: true, special: false },
+            { t: 25.70, txt: "PRETTY", clear: false, style: "size-l", x: 68, y: 42, bg: null,     photo: true, special: false },
+            { t: 26.20, txt: "baby",   clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false, special: false },
+            { t: 26.60, txt: "NOW",   clear: true,  style: "size-m", x: 18, y: 28, bg: "orange",  photo: true, special: false },
+            { t: 27.00, txt: "THAT",  clear: false, style: "size-m", x: 36, y: 28, bg: null,     photo: true, special: false },
+            { t: 27.40, txt: "I'VE",  clear: false, style: "size-m", x: 54, y: 28, bg: null,     photo: true, special: false },
+            { t: 27.80, txt: "FOUND", clear: false, style: "size-m", x: 72, y: 28, bg: null,     photo: true, special: false },
+            { t: 28.20, txt: "YOU",   clear: false, style: "size-m", x: 32, y: 50, bg: null,     photo: true, special: false },
+            { t: 28.40, txt: "STAY!", clear: false, style: "size-l shake", x: 68, y: 50, bg: "pink", photo: true, special: true },
+            { t: 29.80, txt: "LET",   clear: true,  style: "size-m", x: 18, y: 34, bg: "orange", photo: true, special: false },
+            { t: 30.20, txt: "ME",    clear: false, style: "size-m", x: 40, y: 34, bg: null,     photo: true, special: false },
+            { t: 30.60, txt: "LOVE",  clear: false, style: "size-m", x: 62, y: 34, bg: null,     photo: true, special: false },
+            { t: 31.00, txt: "YOU",   clear: false, style: "size-m", x: 84, y: 34, bg: null,     photo: true, special: false },
+            { t: 31.50, txt: "baby",  clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false, special: false },
+            { t: 32.50, txt: "LET",   clear: true,  style: "final-glow", x: 18, y: 30, bg: "orange", photo: true, special: false },
+            { t: 33.00, txt: "ME",    clear: false, style: "final-glow", x: 38, y: 40, bg: null,     photo: true, special: false },
+            { t: 33.50, txt: "LOVE",  clear: false, style: "final-glow", x: 58, y: 50, bg: null,     photo: true, special: false },
+            { t: 34.00, txt: "YOOOOOOOOOOOOOU", clear: false, style: "size-l", x: 48, y: 70, bg: "pink", photo: true, special: "final" }
+        ];
+
+        let lastPhotoIndices = [];
+        function addPhoto() {
+            if (!imageList.length) return;
+            let available = imageList.filter((_, i) => !lastPhotoIndices.includes(i));
+            if (!available.length) { lastPhotoIndices = []; available = imageList; }
+            const idx = imageList.indexOf(available[Math.floor(Math.random() * available.length)]);
+            lastPhotoIndices.push(idx); 
+            if (lastPhotoIndices.length > 5) lastPhotoIndices.shift();
+
+            const img = document.createElement('img');
+            
+            // ВОТ ТУТ ДОБАВИЛ ПАПКУ:
+            img.src = 'resurce/' + imageList[idx]; 
+            
+            img.className = 'photo-item';
+            img.style.setProperty('--rot', `${Math.random() * 24 - 12}deg`);
+            img.style.setProperty('--scl', 0.7 + Math.random() * 0.6);
+            img.style.left = `${10 + Math.random() * 80}%`;
+            img.style.top = `${10 + Math.random() * 80}%`;
+            stage.appendChild(img);
+        }
+
+        function addWord(ev) {
+            const wrapper = document.createElement('div');
+            wrapper.className = `word appear`;
+            wrapper.style.left = `${ev.x}%`; wrapper.style.top = `${ev.y}%`;
+
+            const inner = document.createElement('span');
+            inner.innerText = ev.txt;
+            inner.className = `word-inner ${ev.style}`;
+            if (ev.style.includes('shake')) inner.classList.add('shake');
+            
+            // Специальный фикс для последнего длинного слова
+            if (ev.special === "final") inner.classList.add('final-yell');
+
+            wrapper.appendChild(inner);
+            stage.appendChild(wrapper);
+
+            if (ev.special === true) {
+                setTimeout(() => inner.classList.add('pulse-shake'), 50);
+            } else if (ev.style !== 'baby-force' && ev.style !== 'final-glow' && ev.special !== "final") {
+                setTimeout(() => {
+                    inner.classList.add('karaoke');
+                    setTimeout(() => inner.classList.remove('karaoke'), 400);
+                }, 50);
+            }
+        }
+
+        function clearStage() {
+            [...stage.children].forEach(child => {
+                child.classList.add('fade-out');
+                setTimeout(() => child.remove(), 300);
+            });
+        }
+
+        let lastIndex = -1;
+        let isActive = false;
+        function sync() {
+            if (!isActive) return;
+            const now = audio.currentTime;
+            let idx = -1;
+            for (let i = 0; i < sequence.length; i++) { if (now >= sequence[i].t) idx = i; else break; }
+            if (idx !== -1 && idx !== lastIndex) {
+                const ev = sequence[idx];
+                if (ev.clear) clearStage();
+                if (ev.photo && Math.random() < 0.5) addPhoto();
+                addWord(ev);
+                if (ev.bg) document.body.className = `bg-${ev.bg}`;
+                lastIndex = idx;
+            }
+            requestAnimationFrame(sync);
+        }
+
+        window.startShow = function() {
+            document.getElementById('overlay').remove();
+            audio.play().then(() => {
+                isActive = true;
+                setInterval(() => { if(isActive) addPhoto() }, 1300);
+                sync();
+            });
+        };
+        
+        imageList.forEach(src => { 
+            const img = new Image(); 
+            img.src = 'resurce/' + src; 
+        });
+    })();
+</script>
+</body>
+</html>
