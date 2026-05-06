@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>I LOVE YOU BABY — Fixed Text</title>
+    <title>I LOVE YOU BABY — Smart Responsive</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
 
         :root {
             --orange: #ffae42;
@@ -15,7 +20,9 @@
         }
 
         body, html {
-            width: 100%; height: 100%; overflow: hidden;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             transition: background-color 0.4s ease;
             font-family: 'Montserrat', sans-serif;
         }
@@ -23,126 +30,213 @@
         body.bg-orange { background-color: var(--orange); }
         body.bg-pink { background-color: var(--pink); }
 
-        #stage { position: relative; width: 100vw; height: 100vh; overflow: hidden; pointer-events: none; }
+        #stage {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            pointer-events: none;
+        }
 
-        /* ---------- КОНТЕЙНЕР (Позиция и Появление) ---------- */
+        /* ---------- ДИНАМИЧНОЕ ВЫЛЕТАНИЕ СЛОВ ---------- */
         .word {
             position: absolute;
             z-index: 30;
             transform: translate(-50%, -50%);
             opacity: 0;
+            will-change: transform, opacity;
+            max-width: calc(100vw - 40px);
+            box-sizing: border-box;
         }
 
-        @keyframes fadeUp {
-            0% { opacity: 0; transform: translate(-50%, -50%) translateY(20px); }
-            100% { opacity: 1; transform: translate(-50%, -50%) translateY(0); }
+        @keyframes wordPopIn {
+            0% { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) scale(0.2) rotate(-12deg); 
+            }
+            60% {
+                transform: translate(-50%, -50%) scale(1.18) rotate(3deg);
+            }
+            100% { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1) rotate(0deg); 
+            }
         }
-        .word.appear { animation: fadeUp 0.4s ease-out forwards; }
+        .word.appear { 
+            animation: wordPopIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+        }
 
-        /* ---------- ВНУТРЕННИЙ ТЕКСТ (Эффекты) ---------- */
+        /* ---------- УСИЛЕННОЕ ПОСТОЯННОЕ ДЫХАНИЕ ТЕКСТА ---------- */
         .word-inner {
             display: block;
             color: var(--dark-text);
             text-align: center;
             white-space: nowrap;
-            filter: drop-shadow(3px 3px 0 white);
+            filter: drop-shadow(4px 4px 0 rgba(255,255,255,0.8));
             font-weight: 900;
-            /* Общая анимация "дыхания" для всего текста */
-            animation: textBreathing 2s infinite alternate ease-in-out;
+            /* Дыхание теперь глубокое (до 1.12x) и очень живое */
+            animation: textBreathing 1.4s infinite alternate ease-in-out;
         }
 
         @keyframes textBreathing {
-            from { transform: scale(1); }
-            to { transform: scale(1.03); }
+            from { transform: scale(0.92); }
+            to { transform: scale(1.12); } 
         }
 
-        /* КАРАОКЕ-ПОДСВЕТКА */
+        /* Эффект подсветки караоке */
         .karaoke {
             color: var(--accent) !important;
-            text-shadow: 0 0 8px #ff66aa;
-            transition: 0.2s;
+            text-shadow: 0 0 10px #ff66aa;
+            transition: color 0.2s, text-shadow 0.2s;
         }
 
-        /* СПЕЦЭФФЕКТ ДЛЯ STAY! */
+        /* Пульсирующая встряска для ключевых слов (STAY!) */
         .pulse-shake {
-            animation: pulseShake 0.6s ease-in-out infinite alternate !important;
+            animation: pulseShake 0.5s ease-in-out infinite alternate !important;
         }
         @keyframes pulseShake {
-            0% { transform: scale(1) rotate(0deg); color: var(--dark-text); }
-            100% { transform: scale(1.15) rotate(2deg); color: var(--accent); }
+            0% { transform: scale(1) rotate(-2deg); color: var(--dark-text); }
+            100% { transform: scale(1.22) rotate(2deg); color: var(--accent); text-shadow: 0 0 15px #ff3388; }
         }
 
-        /* ФИКС ФИНАЛЬНОГО YOOOOOOOU (Стабильный и мощный) */
+        /* Финальный крик */
         .final-yell {
-            animation: finalExpand 0.8s infinite alternate ease-in-out !important;
-            display: inline-block;
+            animation: finalExpand 0.6s infinite alternate ease-in-out !important;
+            display: inline-block; 
             color: var(--accent) !important;
-            text-shadow: 0 0 20px #ff3388 !important;
+            text-shadow: 0 0 25px #ff3388 !important;
         }
-        @keyframes finalExpand {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); filter: brightness(1.2); }
-        }
-
-        .shake { animation: shakeAnim 0.15s infinite alternate; }
-        @keyframes shakeAnim {
-            from { transform: translateX(-2px); }
-            to { transform: translateX(2px); }
+        @keyframes finalExpand { 
+            from { transform: scale(0.95); } 
+            to { transform: scale(1.2); } 
         }
 
-        .size-l { font-size: clamp(3.5rem, 14vw, 9.5rem); }
-        .size-m { font-size: clamp(2rem, 7vw, 5.5rem); font-weight: 800; }
+        .shake { animation: shakeAnim 0.1s infinite alternate; }
+        @keyframes shakeAnim { 
+            from { transform: translateX(-3px); } 
+            to { transform: translateX(3px); } 
+        }
 
+        /* Размеры шрифтов */
+        .size-l { font-size: clamp(3.5rem, 13vw, 9.5rem); }
+        .size-m { font-size: clamp(2rem, 7.5vw, 5.5rem); font-weight: 800; }
+
+        /* Стиль для BABY */
         .baby-force {
             font-family: 'Permanent Marker', cursive !important;
-            font-size: clamp(6rem, 20vw, 14rem) !important;
+            font-size: clamp(5.5rem, 19vw, 13.5rem) !important;
             color: #ff1a6e !important;
             -webkit-text-stroke: 2px white !important;
-            animation: babyBounce 0.5s infinite alternate ease-in-out !important;
+            text-shadow: 0 0 15px #ff66aa, 0 0 30px #ff3388 !important;
+            animation: babyBounce 0.45s infinite alternate ease-in-out !important;
         }
-        @keyframes babyBounce {
-            from { transform: scale(0.96) rotate(-3deg); }
-            to { transform: scale(1.08) rotate(3deg); }
+        @keyframes babyBounce { 
+            from { transform: scale(0.9) rotate(-4deg); } 
+            to { transform: scale(1.1) rotate(4deg); } 
         }
 
+        /* Финальный градиент */
         .final-glow {
-            font-size: clamp(3rem, 14vw, 9rem) !important;
-            background: linear-gradient(135deg, #fff1b5, #ffae42, #ff5e7e);
-            -webkit-background-clip: text;
+            font-size: clamp(3rem, 13vw, 9rem) !important;
+            background: linear-gradient(135deg, #fff, #ffae42, #ff2a6d);
             background-clip: text;
+            -webkit-background-clip: text;
             color: transparent !important;
-            animation: pulseGlow 0.8s infinite alternate !important;
+            animation: pulseGlow 0.6s infinite alternate !important;
         }
-        @keyframes pulseGlow {
-            from { transform: scale(0.98); }
-            to { transform: scale(1.05); }
+        @keyframes pulseGlow { 
+            from { transform: scale(0.94); } 
+            to { transform: scale(1.12); } 
         }
 
-        /* ---------- ФОТО (БЕЗ ИЗМЕНЕНИЙ) ---------- */
+        /* ---------- ФОТО (Красивый хаос на фоне) ---------- */
         .photo-item {
-            position: absolute; width: 400px; max-width: 80vw;
-            background: white; padding: 14px 14px 24px 14px;
-            border-radius: 8px; box-shadow: 0 25px 35px -12px rgba(0,0,0,0.4);
+            position: absolute; 
+            width: 380px; 
+            max-width: 75vw;
+            height: auto;
+            max-height: 60vh;
+            object-fit: cover;
+            background: white; 
+            padding: 12px 12px 22px 12px;
+            border-radius: 6px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.35);
             opacity: 0;
             transform: translate(-50%, -50%) rotate(var(--rot)) scale(0.3);
-            animation: photoFly 0.5s cubic-bezier(0.2, 1.1, 0.4, 1) forwards, gentleFloat 4s infinite alternate;
+            animation: photoFly 0.6s cubic-bezier(0.2, 1, 0.3, 1) forwards, gentleFloat 4s infinite alternate;
+            will-change: transform;
+            z-index: 10;
         }
-        @keyframes photoFly { to { opacity: 1; transform: translate(-50%, -50%) rotate(var(--rot)) scale(var(--scl)); } }
+        @keyframes photoFly { 
+            to { opacity: 1; transform: translate(-50%, -50%) rotate(var(--rot)) scale(var(--scl)); } 
+        }
         @keyframes gentleFloat {
             from { transform: translate(-50%, -50%) rotate(var(--rot)) scale(var(--scl)) translateY(0); }
-            to { transform: translate(-50%, -50%) rotate(var(--rot)) scale(var(--scl)) translateY(-12px); }
+            to { transform: translate(-50%, -50%) rotate(var(--rot)) scale(var(--scl)) translateY(-10px); }
+        }
+
+
+        .photo-rain {
+            position: absolute; width: 220px; max-width: 45vw;
+            background: white; padding: 10px 10px 20px 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 5; 
+            top: -350px; /* Выше экрана */
+            left: var(--x);
+            animation: fallDown var(--dur) linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes fallDown {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(calc(100vh + 500px)) rotate(var(--end-rot)); opacity: 0; }
         }
 
         .fade-out { animation: fadeOut 0.3s forwards !important; }
-        @keyframes fadeOut { to { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } }
+        @keyframes fadeOut { to { opacity: 0; transform: scale(0.85); } }
 
+        /* ---------- СТИЛЬНАЯ КНОПКА СТАРТА (Морфизм + Свечение) ---------- */
         #overlay {
-            position: fixed; inset: 0; background: radial-gradient(circle at 40% 30%, #ffc285, #ff9800);
-            z-index: 1000; display: flex; justify-content: center; align-items: center; cursor: pointer;
+            position: fixed; inset: 0; 
+            background: radial-gradient(circle at center, #ffae42 0%, #ff5e7e 100%);
+            z-index: 1000; display: flex; justify-content: center; align-items: center; 
+            cursor: pointer; transition: 0.5s;
         }
-        .start-btn { font-size: 2.5rem; font-weight: 900; color: white; border: 3px solid white; padding: 1rem 2.5rem; border-radius: 70px; background: rgba(0,0,0,0.2); backdrop-filter: blur(10px); }
+        .start-btn { 
+            font-size: clamp(1.5rem, 6vw, 2.8rem); 
+            font-weight: 900; 
+            color: white; 
+            border: 2px solid rgba(255,255,255,0.4); 
+            padding: 1.2rem 3rem; 
+            border-radius: 100px; 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2), inset 0 0 20px rgba(255,255,255,0.1);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            animation: btnPulse 2s infinite;
+        }
+        .start-btn:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 40px rgba(255, 42, 109, 0.4);
+            border-color: white;
+        }
+        @keyframes btnPulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+            70% { box-shadow: 0 0 0 25px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+
+        @media (max-width: 680px) {
+            .word-inner { white-space: normal; width: 90vw; }
+            .baby-force { font-size: clamp(4rem, 16vw, 9rem) !important; -webkit-text-stroke: 1px white !important; }
+            .photo-item { width: 260px; }
+        }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Permanent+Marker&display=swap" rel="stylesheet">
 </head>
 <body class="bg-orange">
 
@@ -158,75 +252,95 @@
         const audio = document.getElementById('musicTrack');
         const stage = document.getElementById('stage');
 
+        // Твои фотки
         const imageList = [
             "2026-05-03 19.49.19.jpg", "2026-05-03 19.49.26.jpg", "2026-05-03 19.49.36.jpg", 
             "2026-05-03 19.49.42.jpg", "2026-05-03 19.49.48.jpg", "2026-05-03 19.50.09.jpg",
             "2026-05-03 19.50.40.jpg", "2026-05-03 19.50.45.jpg", "2026-05-03 21.57.31.jpg", 
             "2026-05-03 21.56.16.jpg", "2026-05-03 22.03.55.jpg", "2026-05-03 22.04.05.jpg",
             "2026-05-04 22.09.51.jpg", "2026-05-04 22.08.25.jpg", "2026-05-04 22.09.58.jpg", 
-            "2026-05-04 22.08.25.jpg", "2026-05-03 21.57.31.jpg", "2026-05-04 22.08.49.jpg", 
-            "2026-05-03 22.03.55.jpg", "2026-05-04 22.09.21.jpg", "2026-05-04 22.07.40.jpg", 
+            "2026-05-04 22.08.49.jpg", "2026-05-04 22.09.21.jpg", "2026-05-04 22.07.40.jpg", 
             "2026-05-04 22.07.30.jpg", "2026-05-04 22.07.13.jpg", "2026-05-04 22.07.09.jpg", 
             "2026-05-04 22.06.57.jpg", "2026-05-04 22.06.50.jpg", "2026-05-04 22.06.46.jpg"
         ];
 
+        // Координаты и тайминги
         const sequence = [
-            { t: 4.00, txt: "I",      clear: true,  style: "size-l", x: 22, y: 40, bg: "orange", photo: true, special: false },
-            { t: 4.50, txt: "LOVE",   clear: false, style: "size-l", x: 50, y: 40, bg: null,     photo: true, special: false },
-            { t: 5.00, txt: "YOU",    clear: false, style: "size-l", x: 78, y: 40, bg: null,     photo: true, special: false },
-            { t: 5.50, txt: "baby",   clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false, special: false },
-            { t: 7.00, txt: "AND",    clear: true,  style: "size-m", x: 22, y: 30, bg: "orange",  photo: true, special: false },
-            { t: 7.35, txt: "IF",     clear: false, style: "size-m", x: 50, y: 30, bg: null,     photo: true, special: false },
-            { t: 7.70, txt: "IT'S",   clear: false, style: "size-m", x: 78, y: 30, bg: null,     photo: true, special: false },
-            { t: 8.05, txt: "QUITE",  clear: false, style: "size-m", x: 32, y: 52, bg: null,     photo: true, special: false },
-            { t: 8.60, txt: "ALRIGHT!", clear: false, style: "size-l shake", x: 78, y: 52, bg: "pink", photo: true, special: false },
-            { t: 9.30, txt: "I",      clear: true,  style: "size-l", x: 22, y: 35, bg: "orange", photo: true, special: false },
-            { t: 9.70, txt: "NEED",   clear: false, style: "size-l", x: 50, y: 35, bg: null,     photo: true, special: false },
-            { t: 10.10, txt: "YOU",   clear: false, style: "size-l", x: 78, y: 35, bg: null,     photo: true, special: false },
-            { t: 10.50, txt: "baby",  clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false, special: false },
-            { t: 11.20, txt: "TO",    clear: true,  style: "size-m", x: 22, y: 28, bg: "orange",  photo: true, special: false },
-            { t: 11.55, txt: "WARM",  clear: false, style: "size-m", x: 50, y: 28, bg: null,     photo: true, special: false },
-            { t: 11.90, txt: "THE",   clear: false, style: "size-m", x: 78, y: 28, bg: null,     photo: true, special: false },
-            { t: 12.25, txt: "LONELY", clear: false, style: "size-l shake", x: 32, y: 50, bg: null, photo: true, special: false },
-            { t: 12.80, txt: "NIGHT", clear: false, style: "size-l", x: 68, y: 50, bg: "pink",     photo: true, special: false },
-            { t: 13.60, txt: "I",     clear: true,  style: "size-l", x: 22, y: 38, bg: "orange", photo: true, special: false },
-            { t: 14.00, txt: "LOVE",  clear: false, style: "size-l", x: 50, y: 38, bg: null,     photo: true, special: false },
-            { t: 14.40, txt: "YOU",   clear: false, style: "size-l", x: 78, y: 38, bg: null,     photo: true, special: false },
-            { t: 14.80, txt: "baby",  clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false, special: false },
-            { t: 15.50, txt: "TRUST", clear: true,  style: "size-m", x: 22, y: 30, bg: "orange", photo: true, special: false },
-            { t: 15.90, txt: "IN",    clear: false, style: "size-m", x: 50, y: 30, bg: null,     photo: true, special: false },
-            { t: 16.30, txt: "ME",    clear: false, style: "size-m", x: 78, y: 30, bg: null,     photo: true, special: false },
-            { t: 16.70, txt: "WHEN",  clear: false, style: "size-m", x: 28, y: 52, bg: null,     photo: true, special: false },
-            { t: 17.10, txt: "I",     clear: false, style: "size-m", x: 50, y: 52, bg: null,     photo: true, special: false },
-            { t: 17.85, txt: "SAAAAAY", clear: false, style: "size-l shake", x: 72, y: 52, bg: "pink", photo: true, special: true },
-            { t: 20.20, txt: "OH",     clear: true,  style: "size-l", x: 32, y: 42, bg: "orange", photo: true, special: false },
-            { t: 20.60, txt: "PRETTY", clear: false, style: "size-l", x: 68, y: 42, bg: null,     photo: true, special: false },
-            { t: 21.10, txt: "baby",   clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false, special: false },
-            { t: 22.60, txt: "DON'T", clear: true,  style: "size-m", x: 18, y: 30, bg: "orange", photo: true, special: false },
-            { t: 23.00, txt: "BRING", clear: false, style: "size-m", x: 36, y: 30, bg: null,     photo: true, special: false },
-            { t: 23.40, txt: "ME",    clear: false, style: "size-m", x: 54, y: 30, bg: null,     photo: true, special: false },
-            { t: 23.80, txt: "DOWN",  clear: false, style: "size-m", x: 72, y: 30, bg: null,     photo: true, special: false },
-            { t: 24.20, txt: "I",     clear: false, style: "size-m", x: 32, y: 52, bg: null,     photo: true, special: false },
-            { t: 24.60, txt: "PRAY",  clear: false, style: "size-l shake", x: 68, y: 52, bg: "pink", photo: true, special: true },
-            { t: 25.30, txt: "OH",     clear: true,  style: "size-l", x: 32, y: 42, bg: "orange", photo: true, special: false },
-            { t: 25.70, txt: "PRETTY", clear: false, style: "size-l", x: 68, y: 42, bg: null,     photo: true, special: false },
-            { t: 26.20, txt: "baby",   clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false, special: false },
-            { t: 26.60, txt: "NOW",   clear: true,  style: "size-m", x: 18, y: 28, bg: "orange",  photo: true, special: false },
-            { t: 27.00, txt: "THAT",  clear: false, style: "size-m", x: 36, y: 28, bg: null,     photo: true, special: false },
-            { t: 27.40, txt: "I'VE",  clear: false, style: "size-m", x: 54, y: 28, bg: null,     photo: true, special: false },
-            { t: 27.80, txt: "FOUND", clear: false, style: "size-m", x: 72, y: 28, bg: null,     photo: true, special: false },
-            { t: 28.20, txt: "YOU",   clear: false, style: "size-m", x: 32, y: 50, bg: null,     photo: true, special: false },
-            { t: 28.40, txt: "STAY!", clear: false, style: "size-l shake", x: 68, y: 50, bg: "pink", photo: true, special: true },
-            { t: 29.80, txt: "LET",   clear: true,  style: "size-m", x: 18, y: 34, bg: "orange", photo: true, special: false },
-            { t: 30.20, txt: "ME",    clear: false, style: "size-m", x: 40, y: 34, bg: null,     photo: true, special: false },
-            { t: 30.60, txt: "LOVE",  clear: false, style: "size-m", x: 62, y: 34, bg: null,     photo: true, special: false },
-            { t: 31.00, txt: "YOU",   clear: false, style: "size-m", x: 84, y: 34, bg: null,     photo: true, special: false },
-            { t: 31.50, txt: "baby",  clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false, special: false },
-            { t: 32.50, txt: "LET",   clear: true,  style: "final-glow", x: 18, y: 30, bg: "orange", photo: true, special: false },
-            { t: 33.00, txt: "ME",    clear: false, style: "final-glow", x: 38, y: 40, bg: null,     photo: true, special: false },
-            { t: 33.50, txt: "LOVE",  clear: false, style: "final-glow", x: 58, y: 50, bg: null,     photo: true, special: false },
-            { t: 34.00, txt: "YOOOOOOOOOOOOOU", clear: false, style: "size-l", x: 48, y: 70, bg: "pink", photo: true, special: "final" }
+            { t: 4.00, txt: "I",      clear: true,  style: "size-l", x: 20, y: 30, bg: "orange", photo: true },
+            { t: 4.50, txt: "LOVE",   clear: false, style: "size-l", x: 50, y: 35, bg: null,     photo: true },
+            { t: 5.00, txt: "YOU",    clear: false, style: "size-l", x: 80, y: 30, bg: null,     photo: true },
+            { t: 5.50, txt: "baby",   clear: false, style: "baby-force", x: 50, y: 70, bg: "pink", photo: false },
+
+            { t: 7.00, txt: "AND",    clear: true,  style: "size-m", x: 22, y: 25, bg: "orange",  photo: true },
+            { t: 7.35, txt: "IF",     clear: false, style: "size-m", x: 48, y: 30, bg: null,     photo: true },
+            { t: 7.70, txt: "IT'S",   clear: false, style: "size-m", x: 74, y: 25, bg: null,     photo: true },
+            { t: 8.05, txt: "QUITE",  clear: false, style: "size-m", x: 30, y: 55, bg: null,     photo: true },
+            { t: 8.60, txt: "ALRIGHT!", clear: false, style: "size-l shake", x: 72, y: 55, bg: "pink", photo: true },
+
+            { t: 9.30, txt: "I",      clear: true,  style: "size-l", x: 28, y: 22, bg: "orange", photo: true },
+            { t: 9.70, txt: "NEED",   clear: false, style: "size-l", x: 70, y: 26, bg: null,     photo: true },
+            { t: 10.10, txt: "YOU",   clear: false, style: "size-l", x: 40, y: 46, bg: null,     photo: true },
+            { t: 10.50, txt: "baby",  clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false },
+
+            { t: 11.20, txt: "TO",    clear: true,  style: "size-m", x: 20, y: 22, bg: "orange",  photo: true },
+            { t: 11.55, txt: "WARM",  clear: false, style: "size-m", x: 42, y: 28, bg: null,     photo: true },
+            { t: 11.90, txt: "THE",   clear: false, style: "size-m", x: 64, y: 36, bg: null,     photo: true },
+            { t: 12.25, txt: "LONELY", clear: false, style: "size-l shake", x: 35, y: 65, bg: "pink", photo: true },
+            { t: 12.80, txt: "NIGHT", clear: false, style: "size-l", x: 72, y: 62, bg: null,     photo: true },
+
+            { t: 13.60, txt: "I",     clear: true,  style: "size-l", x: 22, y: 25, bg: "orange", photo: true },
+            { t: 14.00, txt: "LOVE",  clear: false, style: "size-l", x: 50, y: 25, bg: null,     photo: true },
+            { t: 14.40, txt: "YOU",   clear: false, style: "size-l", x: 78, y: 25, bg: null,     photo: true },
+            { t: 14.80, txt: "baby",  clear: false, style: "baby-force", x: 50, y: 68, bg: "pink", photo: false },
+
+            { t: 15.50, txt: "TRUST", clear: true,  style: "size-m", x: 20, y: 28, bg: "orange", photo: true },
+            { t: 15.90, txt: "IN",    clear: false, style: "size-m", x: 50, y: 28, bg: null,     photo: true },
+            { t: 16.30, txt: "ME",    clear: false, style: "size-m", x: 80, y: 28, bg: null,     photo: true },
+            { t: 16.70, txt: "WHEN",  clear: false, style: "size-m", x: 28, y: 55, bg: null,     photo: true },
+            { t: 17.10, txt: "I",     clear: false, style: "size-m", x: 50, y: 55, bg: null,     photo: true },
+            { t: 17.85, txt: "SAAAAAY", clear: false, style: "size-l shake", x: 74, y: 55, bg: "pink", photo: true },
+
+            { t: 20.20, txt: "OH",     clear: true,  style: "size-l", x: 28, y: 38, bg: "orange", photo: true },
+            { t: 20.60, txt: "PRETTY", clear: false, style: "size-l", x: 72, y: 38, bg: null,     photo: true },
+            { t: 21.10, txt: "baby",   clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false },
+
+            { t: 22.60, txt: "DON'T", clear: true,  style: "size-m", x: 16, y: 20, bg: "orange", photo: true },
+            { t: 23.00, txt: "BRING", clear: false, style: "size-m", x: 36, y: 28, bg: null,     photo: true },
+            { t: 23.40, txt: "ME",    clear: false, style: "size-m", x: 56, y: 36, bg: null,     photo: true },
+            { t: 23.80, txt: "DOWN",  clear: false, style: "size-m", x: 76, y: 44, bg: null,     photo: true },
+            { t: 24.20, txt: "I",     clear: false, style: "size-m", x: 38, y: 68, bg: null,     photo: true },
+            { t: 24.60, txt: "PRAY",  clear: false, style: "size-m shake", x: 68, y: 72, bg: "pink", photo: true },
+
+            { t: 25.30, txt: "OH",     clear: true,  style: "size-l", x: 74, y: 38, bg: "orange", photo: true },
+            { t: 25.70, txt: "PRETTY", clear: false, style: "size-l", x: 28, y: 38, bg: null,     photo: true },
+            { t: 26.20, txt: "baby",   clear: false, style: "baby-force", x: 50, y: 74, bg: "pink", photo: false },
+
+            { t: 26.60, txt: "NOW",   clear: true,  style: "size-m", x: 20, y: 22, bg: "orange",  photo: true },
+            { t: 27.00, txt: "THAT",  clear: false, style: "size-m", x: 40, y: 22, bg: null,     photo: true },
+            { t: 27.40, txt: "I'VE",  clear: false, style: "size-m", x: 60, y: 22, bg: null,     photo: true },
+            { t: 27.80, txt: "FOUND", clear: false, style: "size-m", x: 80, y: 22, bg: null,     photo: true },
+            { t: 28.20, txt: "YOU",   clear: false, style: "size-m", x: 28, y: 50, bg: null,     photo: true },
+            { t: 28.40, txt: "STAY!", clear: false, style: "size-l shake", x: 72, y: 50, bg: "pink", photo: true, special: true },
+
+            { t: 28.80, txt: "AND",   clear: true,  style: "size-m", x: 50, y: 22, bg: "orange", photo: true },
+            { t: 29.20, txt: "LET",   clear: false,  style: "size-m", x: 18, y: 30, bg: null, photo: true },
+            { t: 29.40, txt: "ME",    clear: false, style: "size-m", x: 38, y: 38, bg: null,     photo: true },
+            { t: 30.40, txt: "LOVE",  clear: false, style: "size-m", x: 58, y: 46, bg: null,     photo: true },
+            { t: 30.80, txt: "YOU",   clear: false, style: "size-m", x: 78, y: 54, bg: null,     photo: true },
+            { t: 31.20, txt: "baby",  clear: false, style: "baby-force", x: 50, y: 64, bg: "pink", photo: false },
+
+            { t: 32.30, txt: "LET",   clear: true,  style: "final-glow", x: 20, y: 28, bg: "orange", photo: true },
+            { t: 33.00, txt: "ME",    clear: false, style: "final-glow", x: 40, y: 38, bg: null,     photo: true },
+            { t: 33.50, txt: "LOVE",  clear: false, style: "final-glow", x: 60, y: 48, bg: null,     photo: true },
+            { t: 34.00, txt: "YOOOOOOOOOOOOOU", clear: true, style: "size-l final-yell", x: 50, y: 48, bg: "pink", photo: false, special: "final" }
         ];
+
+        let currentPhotoIdx = 0;
+        function getNextPhotoSrc() {
+            const src = 'resurce/' + imageList[currentPhotoIdx];
+            currentPhotoIdx = (currentPhotoIdx + 1) % imageList.length;
+            return src;
+        }
 
         let lastPhotoIndices = [];
         function addPhoto() {
@@ -234,57 +348,146 @@
             let available = imageList.filter((_, i) => !lastPhotoIndices.includes(i));
             if (!available.length) { lastPhotoIndices = []; available = imageList; }
             const idx = imageList.indexOf(available[Math.floor(Math.random() * available.length)]);
-            lastPhotoIndices.push(idx); 
-            if (lastPhotoIndices.length > 5) lastPhotoIndices.shift();
+            lastPhotoIndices.push(idx); if (lastPhotoIndices.length > 5) lastPhotoIndices.shift();
 
             const img = document.createElement('img');
-            
-            // ВОТ ТУТ ДОБАВИЛ ПАПКУ:
             img.src = 'resurce/' + imageList[idx]; 
-            
             img.className = 'photo-item';
-            img.style.setProperty('--rot', `${Math.random() * 24 - 12}deg`);
-            img.style.setProperty('--scl', 0.7 + Math.random() * 0.6);
+            img.style.setProperty('--rot', `${Math.random() * 26 - 13}deg`);
+            img.style.setProperty('--scl', 0.6 + Math.random() * 0.7);
             img.style.left = `${10 + Math.random() * 80}%`;
             img.style.top = `${10 + Math.random() * 80}%`;
             stage.appendChild(img);
         }
 
+        function changeTheme(theme) {
+            document.body.className = theme === 'pink' ? 'bg-pink' : 'bg-orange';
+        }
+
+        // ДОЖДЬ ИЗ ФОТО (ДЛЯ ФИНАЛА)
+        function spawnRainPhoto() {
+            if (!imageList.length) return;
+            let available = imageList.filter((_, i) => !lastPhotoIndices.includes(i));
+            if (!available.length) { lastPhotoIndices = []; available = imageList; }
+            const idx = imageList.indexOf(available[Math.floor(Math.random() * available.length)]);
+            lastPhotoIndices.push(idx); if (lastPhotoIndices.length > 5) lastPhotoIndices.shift();
+
+            const img = document.createElement('img');
+            img.src = 'resurce/' + imageList[idx];;
+            img.className = 'photo-rain';
+            
+            const duration = 2 + Math.random() * 1.5; // Скорость падения
+            img.style.setProperty('--x', `${Math.random() * 100}vw`);
+            img.style.setProperty('--dur', `${duration}s`);
+            img.style.setProperty('--end-rot', `${Math.random() * 720 - 360}deg`);
+            
+            stage.appendChild(img);
+
+            // САМОУДАЛЕНИЕ: чистим систему, как только картинка улетела
+            setTimeout(() => {
+                img.remove();
+            }, duration * 1000);
+        }
+
+        function startPhotoRain() {
+            const rainInterval = setInterval(() => {
+                if (!isActive) { clearInterval(rainInterval); return; }
+                spawnRainPhoto();
+            }, 180); // Частота появления
+        }
+
         function addWord(ev) {
             const wrapper = document.createElement('div');
             wrapper.className = `word appear`;
-            wrapper.style.left = `${ev.x}%`; wrapper.style.top = `${ev.y}%`;
+            // Устанавливаем стартовое позиционирование
+            wrapper.style.left = `${ev.x}%`; 
+            wrapper.style.top = `${ev.y}%`;
 
             const inner = document.createElement('span');
             inner.innerText = ev.txt;
             inner.className = `word-inner ${ev.style}`;
             if (ev.style.includes('shake')) inner.classList.add('shake');
-            
-            // Специальный фикс для последнего длинного слова
             if (ev.special === "final") inner.classList.add('final-yell');
+            if (ev.special === "final") {
+                startPhotoRain();
+            }
+            if (ev.special === true) setTimeout(() => inner.classList.add('pulse-shake'), 50);
 
             wrapper.appendChild(inner);
             stage.appendChild(wrapper);
 
-            if (ev.special === true) {
-                setTimeout(() => inner.classList.add('pulse-shake'), 50);
-            } else if (ev.style !== 'baby-force' && ev.style !== 'final-glow' && ev.special !== "final") {
+
+            // ---------- УМНАЯ КОРРЕКЦИЯ ВЫХОДА ЗА ГРАНИЦЫ (DYN-BOUNDS) ----------
+            const w = wrapper.offsetWidth || wrapper.clientWidth;
+            const h = wrapper.offsetHeight || wrapper.clientHeight;
+            const screenW = window.innerWidth;
+            const screenH = window.innerHeight;
+            const pad = 20; // Безопасный барьер в 20px от краев экрана
+
+            let posX = (ev.x / 100) * screenW;
+            let posY = (ev.y / 100) * screenH;
+
+            // Если слово шире всего экрана, центрируем его
+            if (w > screenW - 2 * pad) {
+                posX = screenW / 2;
+            } else {
+                const leftEdge = posX - w / 2;
+                const rightEdge = posX + w / 2;
+                
+                if (leftEdge < pad) {
+                    posX += (pad - leftEdge);
+                } else if (rightEdge > screenW - pad) {
+                    posX -= (rightEdge - (screenW - pad));
+                }
+            }
+
+            // Если слово выше экрана, центрируем по вертикали
+            if (h > screenH - 2 * pad) {
+                posY = screenH / 2;
+            } else {
+                const topEdge = posY - h / 2;
+                const bottomEdge = posY + h / 2;
+
+                if (topEdge < pad) {
+                    posY += (pad - topEdge);
+                } else if (bottomEdge > screenH - pad) {
+                    posY -= (bottomEdge - (screenH - pad));
+                }
+            }
+
+            // Фиксируем пиксельную идеальную координату
+            wrapper.style.left = `${posX}px`;
+            wrapper.style.top = `${posY}px`;
+            // ------------------------------------------------------------------
+
+            // Караоке эффект
+            const isSpecial = ev.special === true || ev.special === "final";
+            const isBaby = ev.style === 'baby-force';
+            const isFinalGlow = ev.style === 'final-glow';
+            
+            if (!isSpecial && !isBaby && !isFinalGlow) {
                 setTimeout(() => {
                     inner.classList.add('karaoke');
-                    setTimeout(() => inner.classList.remove('karaoke'), 400);
+                    setTimeout(() => inner.classList.remove('karaoke'), 350);
                 }, 50);
             }
+
         }
 
         function clearStage() {
             [...stage.children].forEach(child => {
-                child.classList.add('fade-out');
-                setTimeout(() => child.remove(), 300);
+                if (!child.classList.contains('photo-rain')) { // Дождь не чистим, он сам удалится
+                    child.classList.add('fade-out');
+                    setTimeout(() => child.remove(), 300);
+                }
             });
         }
 
         let lastIndex = -1;
         let isActive = false;
+        let animFrame = null;
+        let photoInterval = null;
+
         function sync() {
             if (!isActive) return;
             const now = audio.currentTime;
@@ -295,25 +498,44 @@
                 if (ev.clear) clearStage();
                 if (ev.photo && Math.random() < 0.5) addPhoto();
                 addWord(ev);
-                if (ev.bg) document.body.className = `bg-${ev.bg}`;
+                if (ev.bg) changeTheme(ev.bg);
+                if (ev.txt.toLowerCase() === 'baby') changeTheme('pink');
                 lastIndex = idx;
             }
-            requestAnimationFrame(sync);
+            // if (now >= sequence[sequence.length-1].t + 3 || audio.ended) {
+            //     if (animFrame) cancelAnimationFrame(animFrame);
+            //     if (photoInterval) clearInterval(photoInterval);
+            //     isActive = false;
+            //     return;
+            // }
+            animFrame = requestAnimationFrame(sync);
         }
 
         window.startShow = function() {
-            document.getElementById('overlay').remove();
+            if (isActive) return;
+            const ov = document.getElementById('overlay');
+            ov.style.opacity = '0';
+            setTimeout(() => ov.remove(), 500);
+            clearStage();
+            lastIndex = -1;
+            audio.currentTime = 0;
             audio.play().then(() => {
                 isActive = true;
-                setInterval(() => { if(isActive) addPhoto() }, 1300);
+                setInterval(() => { if(isActive && lastIndex < sequence.length - 1) addPhoto() }, 1300);
+                // photoInterval = setInterval(() => { if(isActive) addPhoto() }, 1300);
                 sync();
+            }).catch(() => {
+                audio.play().then(() => {
+                    isActive = true;
+                    setInterval(() => { if(isActive && lastIndex < sequence.length - 1) addPhoto() }, 1300);
+                    // photoInterval = setInterval(() => { if(isActive) addPhoto() }, 1300);
+                    sync();
+                });
             });
         };
-        
-        imageList.forEach(src => { 
-            const img = new Image(); 
-            img.src = 'resurce/' + src; 
-        });
+
+        // Предзагрузка фоточек из твоей папки resurce
+        imageList.forEach(src => { (new Image()).src = 'resurce/' + src; });
     })();
 </script>
 </body>
